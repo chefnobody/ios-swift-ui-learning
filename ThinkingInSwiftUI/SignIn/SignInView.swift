@@ -10,7 +10,6 @@ import SwiftUI
 
 public struct SignInView: View {
     @ObservedObject var viewModel: SignInViewModel
-    @State private var showingAlert = false
     
     public init(viewModel: SignInViewModel) {
         self.viewModel = viewModel
@@ -58,13 +57,19 @@ public struct SignInView: View {
             }
             .padding(5.0)
         }
-        /*.alert(isPresented: $showingAlert) {
+        .alert(item: $viewModel.error) { error -> Alert in
             Alert(
-                title: "Something went wrong",
-                message: $viewModel.errorMessage,
-                dismissButton: Button("OK", action: { print("OK") })
-            )
-        }*/
+                title: Text("Something went wrong"),
+                message: Text(error.message),
+                dismissButton: .default(Text("OK"))
+                )
+        }
+//        .alert(item: $viewModel.errorMessage, content: { message -> Alert
+//            Alert(title: Text("Something went wrong"),
+//                  message: Text(message),
+//                  dismissButton: .default(Text("OK"))
+//            )
+//        })
     }
 }
 

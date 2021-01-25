@@ -8,11 +8,16 @@
 import Combine
 
 public final class SignInViewModel: ObservableObject {
+    struct ApiError: Identifiable {
+        let id = UUID()
+        let message: String
+    }
+    
     @Published var username: String = ""
     @Published var password: String = ""
     
     @Published var isAuthenticated: Bool = false
-    @Published var errorMessage: String? = nil
+    @Published var error: ApiError? = nil
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -29,7 +34,7 @@ public final class SignInViewModel: ObservableObject {
             .replaceError(with: false)
             .sink { result in
                 self.isAuthenticated = result
-                self.errorMessage = result ? nil : "Sign in failed."
+                self.error = result ? nil : ApiError(message: "Sign in failed.")
             }
             .store(in: &cancellables)
     }
